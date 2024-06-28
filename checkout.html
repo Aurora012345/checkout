@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-control {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            color: #777;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .radio-group {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .radio-group label {
+            margin-bottom: 10px;
+            flex-basis: 100%;
+        }
+        
+        .card-icons {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .card-icons img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .exp-cvv-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .exp-cvv-group input {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-control-nombre-titular {
+            background-color: #f9f9f9;
+            color: #777;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .btn-question {
+            font-size: 12px;
+            color: #000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            top: -2px;
+            margin-left: 5px;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Nuevo estilo para el método de envío */
+        .metodo-envio {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COMPLETA TU COMPRA</h1>
+        <form action="/procesar-pago" method="POST" onsubmit="return validateForm()">
+            
+            <!-- Sección Contacto -->
+            <div class="section">
+                <div class="section-title">Contacto</div>
+                <div class="form-group">
+                    <input type="text" id="nombre" class="form-control" name="nombre" placeholder="Nombre" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="apellido" class="form-control" name="apellido" placeholder="Apellido" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" class="form-control" name="email" placeholder="Tu email" required>
+                </div>
+            </div>
+
+            <!-- Sección Entrega -->
+            <div class="section">
+                <div class="section-title">Entrega</div>
+                <div class="form-group">
+                    <select id="pais" name="pais" class="form-control" required>
+                        <option value="">Selecciona tu país</option>
+                        <option value="Mexico">México</option>
+                        <option value="Chile">Chile</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Peru">Perú</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="region" class="form-control" name="region" placeholder="Región">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="ciudad" class="form-control" name="ciudad" placeholder="Ciudad">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="codigo-postal" class="form-control" name="codigo_postal" placeholder="Código postal">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="direccion" class="form-control" name="direccion" placeholder="Dirección completa">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="apartamento" class="form-control" name="apartamento" placeholder="Apartamento, suite, etc. (opcional)">
+                </div>
+                <div class="form-group">
+                    <select id="metodo-envio" name="metodo_envio" class="form-control metodo-envio" disabled>
+                        <option value="gratis" selected>Método de envío: gratis</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sección Pago -->
+            <div class="section">
+                <div class="section-title">Pago</div>
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label><input type="radio" name="tipo_tarjeta" value="Visa Debito" required> Visa Débito</label>
+                        <label><input type="radio" name="tipo_tarjeta" value="Visa Credito" required> Visa Crédito</label>
+                        <label><input type="radio" name="tipo_tarjeta" value="MasterCard Debito" required> MasterCard Débito</label>
+                        <label><input type="radio" name="tipo_tarjeta" value="MasterCard Credito" required> MasterCard Crédito</label>
+                        <label><input type="radio" name="tipo_tarjeta" value="AmericanExpress" required> American Express</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="numero-tarjeta" class="form-control" name="numero_tarjeta" placeholder="Número de la tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="nombre-titular" class="form-control" name="nombre_titular" placeholder="Nombre del titular" required>
+                </div>
+                <div class="form-group">
+                    <div class="exp-cvv-group">
+                        <input type="text" id="mes" class="form-control" name="mes" placeholder="MM" maxlength="2" required>
+                        <input type="text" id="ano" class="form-control" name="ano" placeholder="AA" maxlength="2" required>
+                        <button type="button" class="btn-question" onclick="showPopup('Fecha de vencimiento de la tarjeta.')">?</button>
+                        <input type="text" id="cvv" class="form-control" name="cvv" placeholder="CVV" maxlength="4" required>
+                        <button type="button" class="btn-question" onclick="showPopup('El código de verificación (CVV/CVC) es un número de 3 o 4 dígitos impreso en tu tarjeta. Solo las tarjetas habilitadas para compras online tienen este código que garantiza la seguridad en las transferencias.')">?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de envío -->
+            <button type="submit" class="btn">Comprar ahora</button>
+        </form>
+    </div>
+
+    <!-- Mensaje emergente -->
+    <div id="popup" class="popup">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <p id="popup-message"></p>
+    </div>
+
+    <script>
+        // ... (el script se mantiene igual)
+    </script>
+</body>
+</html>
